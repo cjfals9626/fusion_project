@@ -1,0 +1,184 @@
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteAdmin`(
+   admin_id INT
+)
+BEGIN
+   delete from user where id = admin_id;
+   delete from admin where user_id = admin_id;
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteProfessor`(
+   professor_id integer
+)
+BEGIN
+   DELETE FROM professor WHERE user_id = professor_id;
+   DELETE FROM user WHERE id = professor_id;
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteStudent`(
+   student_id INT
+)
+BEGIN
+   delete from user where id = student_id;
+   delete from student where user_id = student_id;
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteSubject`(
+   delete_subject_id INT
+)
+BEGIN
+   delete from subject where subject_id = delete_subject_id;
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteSubjectNotOpen`(
+   delete_subject_id INT
+)
+BEGIN
+   delete from subject where subject_id = delete_subject_id;
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteSubjectOpen`(
+   delete_subject_id INT
+)
+BEGIN
+   delete from subjecttime where subject_id = delete_subject_id;
+   delete from subjectopen where subject_id = delete_subject_id;
+   delete from subject where subject_id = delete_subject_id;
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertProfessor`(
+	input_id INT,
+    input_pw varchar(20),
+    input_name varchar(20),
+    input_birth date,
+    input_phoneNumber varchar(20),
+    input_major varchar(20)
+)
+BEGIN
+   insert into professor(user_id, major)
+    values(input_id, input_major);
+   insert into user(id, pw, group_id, name, birth, phoneNumber)
+    values(input_id, input_pw, 2, input_name, input_birth, input_phoneNumber);
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertStudent`(
+	input_id INT,
+    input_pw varchar(20),
+    input_name varchar(20),
+    input_birth date,
+    input_phoneNumber varchar(20),
+    input_major varchar(20),
+    input_grade INT
+)
+BEGIN
+	insert into student(user_id, major, grade)
+    values(input_id, input_major, input_grade);
+	insert into user(id, pw, group_id, name, birth, phoneNumber)
+    values(input_id, input_pw, 3, input_name, input_birth, input_phoneNumber);
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertSubjectOpen`(
+	input_subject_id INT,
+    input_subject_name varchar(20),
+    input_max_people INT,
+    input_number_people INT,
+    input_possible_grade INT,
+    input_subject_plan varchar(100),
+    input_plan_modify_date date,
+    input_credit INT,
+    input_day varchar(10),
+    input_time varchar(10),
+    input_classroom varchar(10)
+)
+BEGIN
+	insert into subject(subject_id, subject_name, open)
+    values(input_subject_id, input_subject_name, false);
+    insert into subject_open(subject_id, max_people, number_people, possible_grade, subject_plan, plan_modify_date, credit)
+    values(input_subject_id, input_max_people, input_number_people,input_possible_grade, input_subject_plan, input_plan_modify_date, input_credit);
+    insert into subject_time(subjectOpen_subject_id, day, time, classroom)
+    values(input_subject_id, input_day, input_time, input_classroom);
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertSubjectNotOpen`(
+	input_subject_id INT,
+    input_subject_name varchar(20)
+)
+BEGIN
+	insert into subject(subject_id, subject_name, open)
+    values(input_subject_id, input_subject_name, false);
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateAdmin`(
+    admin_id INT,
+    input_pw varchar(20),
+    input_name varchar(20),
+    input_birth date,
+    input_phoneNumber varchar(20)
+)
+BEGIN
+	update user set pw = input_pw, name = input_name, birth = input_birth, phoneNumber = input_phoneNumber
+	where id = admin_id;
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateSubjectOpen`(
+    input_subject_id INT,
+    input_subject_name varchar(20),
+    input_max_people int,
+    input_number_people int,
+    input_possible_grade int,
+    input_subject_plan varchar(100),
+    input_plan_modify_date date,
+    input_credit int,
+    input_day varchar(10),
+    input_time varchar(10),
+    input_classroom varchar(10)
+)
+BEGIN
+	update subject set subject_name = input_subject_name
+	where subject_id = input_subject_id;
+	update subject_open set max_people = input_max_people,
+		number_people = input_number_people, possible_grade = input_possible_grade,
+		subject_plan = input_subject_plan, plan_modify_date = input_plan_modify_date, credit = input_credit
+	where subject_id = input_subject_id;
+	update subject_time set day = input_day, time = input_time, classroom = input_classroom
+	where subjectOpen_subject_id = input_subject_id;
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateProfessor`(
+    professor_id INT,
+    input_pw varchar(20),
+    input_name varchar(20),
+    input_birth date,
+    input_phoneNumber varchar(20),
+    input_major varchar(20)
+)
+BEGIN
+	update professor set major = input_major where user_id = professor_id;
+	update user set pw = input_pw, name = input_name, birth = input_birth,
+					phoneNumber = input_phoneNumber
+    where id = professor_id;
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateStudent`(
+	student_id INT,
+    input_pw varchar(20),
+    input_name varchar(20),
+    input_birth date,
+    input_phoneNumber varchar(20),
+    input_major varchar(20),
+    input_grade INT
+)
+BEGIN
+	update student set major = input_major, grade = input_grade where user_id = student_id;
+	update user set pw = input_pw, name = input_name, birth = input_birth, phoneNumber = input_phoneNumber
+    where id = student_id;
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateSubjectNotOpen`(
+    input_subject_id INT,
+    input_subject_name varchar(20)
+)
+BEGIN
+   update subject set subject_name = input_subject_name
+   where subject_id = input_subject_id;
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
