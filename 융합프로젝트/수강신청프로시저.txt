@@ -22,13 +22,6 @@ BEGIN
    delete from student where user_id = student_id;
 END
 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteSubject`(
-   delete_subject_id INT
-)
-BEGIN
-   delete from subject where subject_id = delete_subject_id;
-END
-ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteSubjectNotOpen`(
    delete_subject_id INT
 )
@@ -43,6 +36,20 @@ BEGIN
    delete from subjecttime where subject_id = delete_subject_id;
    delete from subjectopen where subject_id = delete_subject_id;
    delete from subject where subject_id = delete_subject_id;
+END
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertAdmin`(
+	input_id INT,
+    input_pw varchar(20),
+    input_name varchar(20),
+    input_birth date,
+    input_phoneNumber varchar(20)
+)
+BEGIN
+   insert into admin(user_id)
+    values(input_id);
+   insert into user(id, pw, group_id, name, birth, phoneNumber)
+    values(input_id, input_pw, 1, input_name, input_birth, input_phoneNumber);
 END
 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertProfessor`(
