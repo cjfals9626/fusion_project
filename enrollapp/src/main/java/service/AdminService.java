@@ -11,8 +11,16 @@ public class AdminService {
     public AdminService(AdminDAO boardDAO) {
         this.adminDAO = boardDAO;
     }
-    public List<AdminDTO> findAll(){
-        List<AdminDTO> all = adminDAO.findAll();
+    public List<AdminDTO> findAdminAll(){
+        List<AdminDTO> all = adminDAO.findAdminAll();
         return all;
+    }
+
+    public void insertAdmin(int admin_id){
+        //adminDAO.insertAdmin(admin_id);
+    }
+
+    public void updateAdmin(int admin_id){
+        adminDAO.updateAdmin(admin_id);
     }
 }

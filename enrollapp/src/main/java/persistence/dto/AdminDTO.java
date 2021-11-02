@@ -1,5 +1,5 @@
 package persistence.dto;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,6 +13,6 @@ public class AdminDTO {
     private String pw;
     private int group_id;
     private String name;
-    private LocalDateTime birth;
+    private LocalDate birth;
     private String phoneNumber;
 }
