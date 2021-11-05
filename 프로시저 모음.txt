@@ -1,0 +1,255 @@
+CREATE DEFINER=root@localhost PROCEDURE closeSubject(
+   close_subject_id INT
+)
+BEGIN
+   delete from subject_time where subject_id = close_subject_id;
+    delete from subject_open where subject_id = close_subject_id;
+    update subject set open = false where subject_id = open_subject_id;
+END
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE deleteAdmin(
+   admin_id INT
+)
+BEGIN
+   delete from user where id = admin_id;
+   delete from admin where user_id = admin_id;
+END
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE deleteProfessor(
+   professor_id integer
+)
+BEGIN
+   DELETE FROM professor WHERE user_id = professor_id;
+   DELETE FROM user WHERE id = professor_id;
+END
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE deleteStudent(
+   student_id INT
+)
+BEGIN
+   delete from user where id = student_id;
+   delete from student where user_id = student_id;
+END
+
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE deleteSubjectNotOpen(
+   delete_subject_id INT
+)
+BEGIN
+   delete from subject where subject_id = delete_subject_id;
+END
+
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE deleteSubjectOpen(
+   delete_subject_id INT
+)
+BEGIN
+   delete from subject_time where subject_id = delete_subject_id;
+   delete from subject_open where subject_id = delete_subject_id;
+   delete from subject where subject_id = delete_subject_id;
+END
+
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE insertAdmin(
+    input_id INT,
+    input_pw varchar(20),
+    input_name varchar(20),
+    input_birth date,
+    input_phoneNumber varchar(20)
+)
+BEGIN
+   insert into admin(user_id)
+    values(input_id);
+   insert into user(id, pw, group_id, name, birth, phoneNumber)
+    values(input_id, input_pw, 1, input_name, input_birth, input_phoneNumber);
+END
+
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE insertProfessor(
+    input_id INT,
+    input_pw varchar(20),
+    input_name varchar(20),
+    input_birth date,
+    input_phoneNumber varchar(20),
+    input_major varchar(20)
+)
+BEGIN
+   insert into professor(user_id, major)
+    values(input_id, input_major);
+   insert into user(id, pw, group_id, name, birth, phoneNumber)
+    values(input_id, input_pw, 2, input_name, input_birth, input_phoneNumber);
+END
+
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE insertStudent(
+    input_id INT,
+    input_pw varchar(20),
+    input_name varchar(20),
+    input_birth date,
+    input_phoneNumber varchar(20),
+    input_major varchar(20),
+    input_grade INT
+)
+BEGIN
+    insert into student(user_id, major, grade)
+    values(input_id, input_major, input_grade);
+    insert into user(id, pw, group_id, name, birth, phoneNumber)
+    values(input_id, input_pw, 3, input_name, input_birth, input_phoneNumber);
+END
+
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE insertSubjectNotOpen(
+    input_subject_id INT,
+    input_subject_name varchar(20),
+    input_possible_grade INT
+)
+BEGIN
+    insert into subject(subject_id, subject_name, open, possible_grade)
+    values(input_subject_id, input_subject_name, false, input_possible_grade);
+END
+
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE insertSubjectOpen(
+    input_subject_id INT,
+    input_subject_name varchar(20),
+    input_possible_grade INT,
+    input_max_people INT,
+    input_number_people INT,
+    input_subject_plan varchar(100),
+    input_plan_modify_date date,
+    input_credit INT,
+    input_day varchar(10),
+    input_time varchar(10),
+    input_classroom varchar(10),
+    input_professor_id INT
+)
+BEGIN
+    insert into subject(subject_id, subject_name, open, possible_grade)
+    values(input_subject_id, input_subject_name, true, input_possible_grade);
+    insert into subject_open(subject_id, max_people, number_people, subject_plan, plan_modify_date, credit)
+    values(input_subject_id, input_max_people, input_number_people, input_subject_plan, input_plan_modify_date, input_credit);
+    insert into subject_time(subjectOpen_subject_id, day, time, classroom)
+    values(input_subject_id, input_day, input_time, input_classroom);
+    insert into per_professor_class(professor_user_id, subject_id)
+    values(input_professor_id, input_subject_id);
+END
+
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE openSubject(
+   open_subject_id INT,
+    open_max_people INT,
+    open_number_people INT,
+    open_possible_grade INT,
+    open_subject_plan varchar(100),
+    open_plan_modify_date datetime,
+    open_credit INT,
+    open_day varchar(10),
+    open_time varchar(10),
+   open_classroom varchar(10)
+)
+BEGIN
+   update subject set open = true where subject_id = open_subject_id;
+    insert into subjectopen(max_people, number_people, possible_grade, subject_plan, plan_modify_date, credit) 
+    values(open_max_people, open_number_people, open_possible_grade, open_subject_plan, open_plan_modify_date, open_credit);
+    insert into subjecttime(day, time, classroom) values(open_day, open_time, open_classroom);
+END
+
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE updateProfessor(
+    professor_id INT,
+    input_phoneNumber varchar(20)
+)
+BEGIN
+    update user set phoneNumber = input_phoneNumber where id = professor_id;
+END
+
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE updateStudent(
+    student_id INT,
+    input_name varchar(20)
+)
+BEGIN
+    update user set name = input_name where id = student_id;
+END
+
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE updateSubjectNotOpen(
+    input_subject_id INT,
+    input_subject_name varchar(20)
+)
+BEGIN
+   update subject set subject_name = input_subject_name where subject_id = input_subject_id;
+END
+
+
+
+
+
+
+CREATE DEFINER=root@localhost PROCEDURE updateSubjectOpen(
+    input_subject_id INT,
+    input_max_people int,
+    input_classroom varchar(10)
+)
+BEGIN
+    update subject_open set max_people = input_max_people
+    where subject_id = input_subject_id;
+    update subject_time set classroom = input_classroom
+    where subjectOpen_subject_id = input_subject_id;
+END
