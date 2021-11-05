@@ -5,7 +5,7 @@
 
 <configuration>
     <typeAliases>
-        <typeAlias alias="SubjectOpen" type="persistence.dto.SubjectOpenDTO"/>
+        <typeAlias alias="SubjectNotOpen" type="persistence.dto.SubjectNotOpenDTO"/>
     </typeAliases>
 
     <environments default="development">
@@ -22,6 +22,6 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="sqlmapper/SubjectOpen.xml"/>
+        <mapper resource="sqlmapper/SubjectNotOpen.xml"/>
     </mappers>
 </configuration>

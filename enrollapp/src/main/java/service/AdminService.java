@@ -16,11 +16,8 @@ public class AdminService {
         return all;
     }
 
-    public void insertAdmin(int admin_id){
-        //adminDAO.insertAdmin(admin_id);
-    }
-
-    public void updateAdmin(int admin_id){
-        adminDAO.updateAdmin(admin_id);
+    public List<AdminDTO> findAll(){
+        List<AdminDTO> all = adminDAO.findAll();
+        return all;
     }
 }

@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class StudentDAO {
-    private final DataSource ds = PooledDataSource.getDataSource();
+    protected final DataSource ds = PooledDataSource.getDataSource();
     public List<StudentDTO> findStudentAll(){
         Connection conn = null;
         String sql = "select * from user natural join student where user.id = student.user_id;";
@@ -162,44 +162,15 @@ public class StudentDAO {
                 rs.next();
                 StudentDTO studentDTO = new StudentDTO();
                 int id = rs.getInt("id");
-                String pw = rs.getString("pw");
-                int group_id = rs.getInt("group_id");
                 String name = rs.getString("name");
-                LocalDate birth = rs.getTimestamp("birth").toLocalDateTime().toLocalDate();
-                String phoneNumber = rs.getString("phoneNumber");
-                String major = rs.getString("major");
-                int grade = rs.getInt("grade");
 
                 Scanner s = new Scanner(System.in);
-                System.out.print("input pw : ");
-                pw = s.next();
                 System.out.print("input name : ");
                 name = s.next();
-                System.out.print("input birth : ");
-                birth = LocalDate.parse(s.next(), DateTimeFormatter.ISO_DATE);
-                System.out.print("input phoneNumber : ");
-                phoneNumber = s.next();
-                System.out.print("input major : ");
-                major = s.next();
-                System.out.print("input grade : ");
-                grade = s.nextInt();
 
-                cstmt = conn.prepareCall("{call updateStudent(?, ?, ?, ?, ?, ?, ?)}");
+                cstmt = conn.prepareCall("{call updateStudent(?, ?)}");
                 cstmt.setInt(1, id);
-                cstmt.setString(2, pw);
-                cstmt.setString(3, name);
-                cstmt.setDate(4, Date.valueOf(birth));
-                cstmt.setString(5, phoneNumber);
-                cstmt.setString(6, major);
-                cstmt.setInt(7, grade);
-
-                System.out.println(id);
-                System.out.println(pw);
-                System.out.println(name);
-                System.out.println(birth);
-                System.out.println(phoneNumber);
-                System.out.println(major);
-                System.out.println(grade);
+                cstmt.setString(2, name);
 
                 cstmt.executeUpdate();
             } else {

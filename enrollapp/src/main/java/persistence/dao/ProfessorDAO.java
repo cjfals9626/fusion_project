@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ProfessorDAO {
-    private final DataSource ds = PooledDataSource.getDataSource();
+    protected final DataSource ds = PooledDataSource.getDataSource();
     public List<ProfessorDTO> findProfessorAll() {
         Connection conn = null;
         Statement stmt = null;
@@ -163,32 +163,15 @@ public class ProfessorDAO {
                 rs.next();
                 ProfessorDTO professorDTO = new ProfessorDTO();
                 int id = rs.getInt("id");
-                String pw = rs.getString("pw");
-                int group_id = rs.getInt("group_id");
-                String name = rs.getString("name");
-                LocalDate birth = rs.getTimestamp("birth").toLocalDateTime().toLocalDate();
                 String phoneNumber = rs.getString("phoneNumber");
-                String major = rs.getString("major");
 
                 Scanner s = new Scanner(System.in);
-                System.out.print("input pw : ");
-                pw = s.next();
-                System.out.print("input name : ");
-                name = s.next();
-                System.out.print("input birth : ");
-                birth = LocalDate.parse(s.next(), DateTimeFormatter.ISO_DATE);
                 System.out.print("input phoneNumber : ");
                 phoneNumber = s.next();
-                System.out.print("input major : ");
-                major = s.next();
 
-                cstmt = conn.prepareCall("{call updateProfessor(?, ?, ?, ?, ?, ?)}");
+                cstmt = conn.prepareCall("{call updateProfessor(?, ?)}");
                 cstmt.setInt(1, id);
-                cstmt.setString(2, pw);
-                cstmt.setString(3, name);
-                cstmt.setDate(4, Date.valueOf(birth));
-                cstmt.setString(5, phoneNumber);
-                cstmt.setString(6, major);
+                cstmt.setString(2, phoneNumber);
 
                 cstmt.executeUpdate();
             } else {

@@ -10,4 +10,5 @@ public class SubjectNotOpenDTO {
     private int subject_id;
     private String subject_name;
     private boolean open;
+    private int possible_grade;
 }
