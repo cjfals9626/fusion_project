@@ -2,6 +2,8 @@ package persistence.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.StatementType;
+import persistence.dto.PerProfessorClassDTO;
+import persistence.dto.PerProfessorClassStudentDTO;
 import persistence.dto.SubjectOpenDTO;
 
 import java.sql.Date;
@@ -87,5 +89,44 @@ public interface SubjectOpenMapper {
     @Options(statementType = StatementType.CALLABLE)
     void updateSubjectOpen(@Param("subject_id") int subject_id, @Param("max_people") int max_people, @Param("classroom") String classroom);
 
+    String getPerProfessorClass = "select * from per_professor_class where subject_id = #{subject_id};";
+    @Select(getPerProfessorClass)
+    @Results(id="perProfessorClass", value = {
+            @Result(property = "professor_user_id", column = "professor_user_id"),
+            @Result(property = "subject_id", column = "subject_id")
+    })
+    List<PerProfessorClassDTO> getPerProfessorClass(@Param("subject_id") int subject_id);
 
+    String getPerProfessorClassStudent =
+            "select * from take_class_state " +
+                    "INNER JOIN user ON user.id = take_class_state.student_user_id " +
+                    "INNER JOIN student ON student.user_id = user.id " +
+                    "where take_class_state.subject_id = #{subject_id} " +
+                    "LIMIT 2 OFFSET #{start, jdbcType=INTEGER}";
+    @Select(getPerProfessorClassStudent)
+    @Results(id="perProfessorClassStudent", value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "birth", column = "birth"),
+            @Result(property = "phoneNumber", column = "phoneNumber"),
+            @Result(property = "major", column = "major"),
+            @Result(property = "grade", column = "grade")
+    })
+    List<PerProfessorClassStudentDTO> getPerProfessorClassStudent(@Param("subject_id") int subject_id, @Param("start") int start);
+
+    String getPerProfessorClassStudentCount =
+            "select count(*) from take_class_state " +
+                    "INNER JOIN user ON user.id = take_class_state.student_user_id " +
+                    "INNER JOIN student ON student.user_id = user.id " +
+                    "where take_class_state.subject_id = #{subject_id} ";
+    @Select(getPerProfessorClassStudentCount)
+//    @Results(id="perProfessorClassStudentCount", value = {
+//            @Result(property = "user_id", column = "user_id"),
+//            @Result(property = "name", column = "name"),
+//            @Result(property = "birth", column = "birth"),
+//            @Result(property = "phoneNumber", column = "phoneNumber"),
+//            @Result(property = "major", column = "major"),
+//            @Result(property = "grade", column = "grade")
+//    })
+    int getPerProfessorClassStudentCount(@Param("subject_id") int subject_id);
 }

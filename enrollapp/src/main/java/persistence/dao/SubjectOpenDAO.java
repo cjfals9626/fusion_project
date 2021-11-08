@@ -3,6 +3,8 @@ package persistence.dao;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import persistence.dto.PerProfessorClassDTO;
+import persistence.dto.PerProfessorClassStudentDTO;
 import persistence.dto.SubjectOpenDTO;
 import persistence.mapper.SubjectOpenMapper;
 
@@ -118,5 +120,56 @@ public class SubjectOpenDAO {
         finally {
             session.close();
         }
+    }
+
+    public List<PerProfessorClassDTO> getPerProfessorClass(int subject_id){
+        List<PerProfessorClassDTO> list = null;
+        SqlSession session = sqlSessionFactory.openSession();
+        SubjectOpenMapper mapper = session.getMapper(SubjectOpenMapper.class);
+        try{
+            list = mapper.getPerProfessorClass(subject_id);
+        }catch ( Exception e)
+        {
+            e.printStackTrace();
+            session.rollback();
+        }
+        finally {
+            session.close();
+        }
+        return list;
+    }
+
+    public List<PerProfessorClassStudentDTO> getPerProfessorClassStudent(int subject_id, int start){
+        List<PerProfessorClassStudentDTO> list = null;
+        SqlSession session = sqlSessionFactory.openSession();
+        SubjectOpenMapper mapper = session.getMapper(SubjectOpenMapper.class);
+        try{
+            list = mapper.getPerProfessorClassStudent(subject_id, start);
+        }catch ( Exception e)
+        {
+            e.printStackTrace();
+            session.rollback();
+        }
+        finally {
+            session.close();
+        }
+        return list;
+    }
+
+    public int getPerProfessorClassStudentCount(int subject_id){
+        int result = 0;
+        SqlSession session = sqlSessionFactory.openSession();
+        SubjectOpenMapper mapper = session.getMapper(SubjectOpenMapper.class);
+        try{
+            result = mapper.getPerProfessorClassStudentCount(subject_id);
+        }catch ( Exception e)
+        {
+            e.printStackTrace();
+            session.rollback();
+        }
+        finally {
+            session.close();
+        }
+        return result;
     }
 }
