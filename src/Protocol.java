@@ -31,6 +31,7 @@ public class Protocol {
                 packet = new byte[Message.LEN_PROTOCOL_TYPE + Message.FIXED_LEN * 2 + Message.LEN_ID + Message.LEN_PW]; // int형은 4 바이트로 변환 + 4 가르키는 FIXED_LEN
                 break;
         }
+        size = 0;
         packet[size++] = (byte) loginType;
         packet[size++] = (byte) messageType;
         return packet;
