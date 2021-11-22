@@ -5,13 +5,13 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class Test {
+public class Client {
     private Socket socket = null;
     private DataInputStream dis = null;
     private DataOutputStream dos = null;
     private Scanner sc;
 
-    public Test(String serverName, int serverPort) {
+    public Client(String serverName, int serverPort) {
         try {
             socket = new Socket(serverName, serverPort);
             System.out.println("Connected: " + socket);
@@ -27,18 +27,39 @@ public class Test {
 
     public void run() {
         try {
-            String line;
+            byte[] recvHeader = new byte[4];
+            dis.read(recvHeader);
+
+            if (recvHeader[1] == 1) {
+                System.out.println("로그인 요청");
+            }
+
+            Protocol protocol = new Protocol();
+            protocol.getLoginPacket(Message.MESSAGE_TYPE_RESPONSE, Message.NULL_HEADER);
+
+            protocol.setIntToByte(sc.nextInt());
+            protocol.setStrToByte(sc.next());
+
+            System.out.println("Packet data : " + new String(protocol.getPacket()));
+
+            dos.write(protocol.getPacket());
+            dos.flush();
+
+            recvHeader = new byte[4];
+            dis.read(recvHeader);
+
+            if (recvHeader[2] == 1) {
+                System.out.println("로그인 성공");
+            } else {
+                System.out.println("로그인 실패");
+            }
 
             while (true) {
-                    Protocol protocol = new Protocol();
-                    protocol.getLoginPacket(Message.MESSAGE_TYPE_RESPONSE);
+                    protocol = new Protocol();
+                    protocol.getLoginPacket(Message.MESSAGE_TYPE_RESPONSE, Message.NULL_HEADER);
                     protocol = new Protocol(1, 1, 1);
 
-
-
                     protocol.getAdminRequestPacket(Message.FUNCTION_TYPE_MAKE_PROFESSOR_ACCOUNT, 2);
-
-
 
                     protocol.setStrToByte(sc.next());
                     protocol.setIntToByte(sc.nextInt());
@@ -62,42 +83,11 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        Test test = null;
+        Client client = null;
         if (args.length != 2)
             System.out.println("Usage: host port");
         else
-            test = new Test(args[0], Integer.parseInt(args[1]));
-        test.run();
+            client = new Client(args[0], Integer.parseInt(args[1]));
+        client.run();
     }
 }
-
-
-
-/*DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-DataInputStream din = new DataInputStream(socket.getInputStream());
-
-protocol.getLoginPacket(Message.MESSAGE_TYPE_RESPONSE);
-
-
-protocol = new Protocol(1, 1, 1);
-
-protocol.getAdminRequestPacket(Message.FUNCTION_TYPE_MAKE_PROFESSOR_ACCOUNT, 2);
-
-System.out.println("-----------------------");
-System.out.println(protocol.getPacket().length);
-System.out.println((protocol.getPacket()[0]));
-System.out.println((protocol.getPacket()[1]));
-System.out.println((protocol.getPacket()[2]));
-System.out.println((protocol.getPacket()[3]));
-System.out.println("-----------------------");
-
-
-protocol.setStrToByte(sc.next());
-protocol.setIntToByte(sc.nextInt());
-protocol.setStrToByte(sc.next());
-protocol.setStrToByte(sc.next());
-protocol.setStrToByte(sc.next());
-protocol.setStrToByte(sc.next());
-
-dos.write(protocol.getPacket());
-dos.flush();*/

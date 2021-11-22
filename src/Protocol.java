@@ -7,7 +7,10 @@ public class Protocol {
     private int size = 0;
 
     public Protocol() {
-        this.loginType = Message.TYPE_UNDEFINED;
+        loginType = Message.NULL_HEADER;
+        messageType = Message.NULL_HEADER;;
+        functionType = Message.NULL_HEADER;;
+        codeType = Message.NULL_HEADER;;
     }
 
     public Protocol(int loginType, int messageType, int functionType) {
@@ -21,7 +24,7 @@ public class Protocol {
     }
 
     // Login 관련 패킷 사이즈 설정
-    public byte[] getLoginPacket(int messageType) {
+    public byte[] getLoginPacket(int messageType, int functionType) {
         switch (messageType) {
             case Message.MESSAGE_TYPE_REQUEST:
             case Message.MESSAGE_TYPE_RESULT:
@@ -34,6 +37,8 @@ public class Protocol {
         size = 0;
         packet[size++] = (byte) loginType;
         packet[size++] = (byte) messageType;
+        packet[size++] = (byte) functionType;
+        packet[size++] = (byte) codeType;
         return packet;
     }
 
